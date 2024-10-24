@@ -31,7 +31,7 @@ names(nUMI) <- rownames(sp@meta.data)
 puck <- SpatialRNA(coords, counts, nUMI)
 
 ### run RCTD in doublet mode
-myRCTD <- create.RCTD(puck, reference, max_cores = 14)
+myRCTD <- create.RCTD(puck, reference, max_cores = 14) #set the max CPU numnber
 myRCTD <- run.RCTD(myRCTD, doublet_mode = 'doublet')
 
 #Save the data
@@ -56,8 +56,8 @@ DefaultAssay(sp) <- "rctd_full"
 cell_types <- c("Tumor Cells")
 
 FeaturePlot(sp, features = cell_types,reduction="spatial", 
-            pt.size=1, cols=c("lightgrey","#ff0000" ))
+            pt.size=1, cols=c("lightgrey","#ff0000" )) # set the color scale from lightgrey to red
 
 #Save the image in pdf form
-ggsave(file = paste0(f, '.pdf'), device = "pdf", path = "Tumor_weight_featurePlot/",
+ggsave(file = 'tumor_weight.pdf', device = "pdf", path = "Tumor_weight_featurePlot/",
        width = 11.69, height = 8.27, units = "in")
