@@ -1,4 +1,5 @@
-# R 4.4.1
+#R version 4.4.1
+# Run RCTD in doublet mode using Stereoseq bin 50 data
 
 library(spacexr)
 library(Matrix)
