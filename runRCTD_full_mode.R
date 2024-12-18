@@ -34,3 +34,28 @@ myRCTD <- run.RCTD(myRCTD, doublet_mode = 'full')
 # saveRDS(myRCTD,file=paste0('./RCTD/',sample,'.RCTDout.rds'))
 saveRDS(myRCTD,"RCTD_output/sample1_RCTD_output.rds")
 save.image("RCTD_output/sample1_RCTD_workspace.RData")
+
+sp <- AddMetaData(sp, metadata = myRCTD@results$weights)
+  
+# Normalize weights
+results <- myRCTD@results
+norm_weights <- normalize_weights(results$weights)
+
+sp[["rctd_full"]] <- CreateAssayObject(data = t(as.matrix(norm_weights)))
+if (length(sp@assays$rctd_full@key) == 0) {
+  sp@assays$rctd_full@key <- "rctd_full_"
+}
+
+# Plotting
+DefaultAssay(sp) <- "rctd_full"
+cell_types <- c("rctdfull_Tumorcells")
+  
+FeaturePlot(sp, features = cell_types,reduction="spatial", 
+            pt.size=3
+              #cols=c("lightgrey","#ff0000")
+) + scale_color_gradientn(colours = c("lightgrey","#ff0000"),  limits = c(0, 1)) +
+  scale_y_reverse()# To flip the y-axis in order to aligh with H&E images
+  
+ggsave(file = fname, device = "pdf", path = "../Tumor_weight_featurePlot/",
+        width = 11.69, height = 8.27, units = "in")
+
